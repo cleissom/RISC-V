@@ -13,6 +13,7 @@ architecture RTL of dmemory_tb is
 	signal addr : std_logic_vector(data_width-1 downto 0);
 	signal write_data : std_logic_vector(data_width-1 downto 0);
 	signal read_data : std_logic_vector(data_width-1 downto 0);
+	signal write_byte : std_logic;
 	
 begin
 	
@@ -28,13 +29,14 @@ begin
 	
 	dut : entity work.dmemory
 		generic map(
-			data_width => data_width
+			dmemory_width => dmemory_width
 		)
 		port map(
 			clk        => clk,
 			mem_write  => mem_write,
 			mem_read   => mem_read,
-			addr       => addr,
+			write_byte => write_byte,
+			addr       => addr(dmemory_width-1 downto 0),
 			write_data => write_data,
 			read_data  => read_data
 		);
@@ -43,29 +45,49 @@ begin
 	begin
 		mem_write <= '0';
 		mem_read <= '0';
-		addr <= std_logic_vector(to_unsigned(2, data_width));
-		write_data <= std_logic_vector(to_signed(25, data_width));
+		write_byte <= '0';
 		wait for 5 ns;
+		addr <= std_logic_vector(to_unsigned(4, data_width));
+		write_data <= std_logic_vector(to_signed(10, data_width));
 		mem_write <= '1';
 		wait for 10 ns;
 		mem_write <='0';
-		addr <= std_logic_vector(to_unsigned(3, data_width));
-		write_data <= std_logic_vector(to_signed(30, data_width));
 		wait for 10 ns;
+		addr <= std_logic_vector(to_unsigned(8, data_width));
+		write_data <= std_logic_vector(to_signed(11, data_width));
 		mem_write <= '1';
 		wait for 10 ns;
 		mem_write <='0';
-		addr <= std_logic_vector(to_unsigned(2, data_width));
 		wait for 10 ns;
+		addr <= std_logic_vector(to_unsigned(4, data_width));
 		mem_read <= '1';
 		wait for 10 ns;
 		mem_read <='0';
-		addr <= std_logic_vector(to_unsigned(3, data_width));
 		wait for 10 ns;
+		addr <= std_logic_vector(to_unsigned(8, data_width));
 		mem_read <= '1';
 		wait for 10 ns;
 		mem_read <='0';
-		wait for 5 ns;
+		wait for 10 ns;
+		addr <= std_logic_vector(to_unsigned(12, data_width));
+		write_data <= std_logic_vector(to_signed(-1, data_width));
+		mem_write <= '1';
+		wait for 10 ns;
+		mem_write <='0';
+		wait for 10 ns;
+		addr <= std_logic_vector(to_unsigned(13, data_width));
+		write_data <= std_logic_vector(to_signed(0, data_width));
+		mem_write <= '1';
+		write_byte <= '1';
+		wait for 10 ns;
+		mem_write <='0';
+		write_byte <= '0';
+		wait for 10 ns;
+		addr <= std_logic_vector(to_unsigned(13, data_width));
+		mem_read <= '1';
+		wait for 10 ns;
+		mem_read <='0';
+		wait for 15 ns;
 	end process;
 		
 end architecture RTL;
