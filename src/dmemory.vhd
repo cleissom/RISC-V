@@ -11,6 +11,7 @@ entity dmemory is
 		mem_write : in std_logic;
 		write_byte: in std_logic;
 		mem_read  : in std_logic;
+		read_byte: in std_logic;
 		addr : in std_logic_vector(dmemory_width-1 downto 0);
 		write_data : in std_logic_vector(31 downto 0);
 		read_data : out std_logic_vector(31 downto 0)
@@ -26,9 +27,11 @@ begin
 	
 	process (clk)
 		variable block_addr : std_logic_vector(dmemory_width-1 downto 0);
-	begin
+		variable byte_addr : std_logic_vector(1 downto 0);
+		begin
 		if rising_edge(clk) then
 			block_addr := addr(dmemory_width-1 downto 2) & "00";
+			byte_addr := addr(1 downto 0);
 			if mem_write = '1' then
 				if write_byte = '1' then
 					ram(to_integer(unsigned(addr))) <= write_data(7 downto 0);
@@ -39,7 +42,11 @@ begin
 					ram(to_integer(unsigned(block_addr))+3) <= write_data(31 downto 24);
 				end if;
 			elsif mem_read = '1' then
-				read_data <= ram(to_integer(unsigned(block_addr))+3) & ram(to_integer(unsigned(block_addr))+2) & ram(to_integer(unsigned(block_addr))+1) & ram(to_integer(unsigned(block_addr)));
+				if read_byte = '1' then
+					read_data <= x"000000" & ram(to_integer(unsigned(block_addr)) + to_integer(unsigned(byte_addr)));
+				else
+					read_data <= ram(to_integer(unsigned(block_addr))+3) & ram(to_integer(unsigned(block_addr))+2) & ram(to_integer(unsigned(block_addr))+1) & ram(to_integer(unsigned(block_addr)));
+				end if;
 			end if;
 		end if;
 	end process;

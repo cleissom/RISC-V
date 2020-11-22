@@ -14,6 +14,7 @@ architecture RTL of dmemory_tb is
 	signal write_data : std_logic_vector(data_width-1 downto 0);
 	signal read_data : std_logic_vector(data_width-1 downto 0);
 	signal write_byte : std_logic;
+	signal read_byte : std_logic;
 	
 begin
 	
@@ -36,6 +37,7 @@ begin
 			mem_write  => mem_write,
 			mem_read   => mem_read,
 			write_byte => write_byte,
+			read_byte => read_byte,
 			addr       => addr(dmemory_width-1 downto 0),
 			write_data => write_data,
 			read_data  => read_data
@@ -46,6 +48,7 @@ begin
 		mem_write <= '0';
 		mem_read <= '0';
 		write_byte <= '0';
+		read_byte  <= '0';
 		wait for 5 ns;
 		addr <= std_logic_vector(to_unsigned(4, data_width));
 		write_data <= std_logic_vector(to_signed(10, data_width));
@@ -81,12 +84,40 @@ begin
 		write_byte <= '1';
 		wait for 10 ns;
 		mem_write <='0';
+		wait for 10 ns;
+		addr <= std_logic_vector(to_unsigned(14, data_width));
+		write_data <= std_logic_vector(to_signed(5, data_width));
+		mem_write <= '1';
+		write_byte <= '1';
+		wait for 10 ns;
+		mem_write <='0';
 		write_byte <= '0';
 		wait for 10 ns;
-		addr <= std_logic_vector(to_unsigned(13, data_width));
+		addr <= std_logic_vector(to_unsigned(12, data_width));
 		mem_read <= '1';
 		wait for 10 ns;
 		mem_read <='0';
+		wait for 10 ns;
+		addr <= std_logic_vector(to_unsigned(12, data_width));
+		mem_read <= '1';
+		read_byte <= '1';
+		wait for 10 ns;
+		mem_read <='0';
+		read_byte <= '0';
+		wait for 10 ns;
+		addr <= std_logic_vector(to_unsigned(13, data_width));
+		mem_read <= '1';
+		read_byte <= '1';
+		wait for 10 ns;
+		mem_read <='0';
+		read_byte <= '0';
+		wait for 10 ns;
+		addr <= std_logic_vector(to_unsigned(14, data_width));
+		mem_read <= '1';
+		read_byte <= '1';
+		wait for 10 ns;
+		mem_read <='0';
+		read_byte <= '0';
 		wait for 15 ns;
 	end process;
 		

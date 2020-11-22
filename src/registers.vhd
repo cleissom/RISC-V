@@ -23,8 +23,12 @@ architecture RTL of registers is
 	signal registers : memory_array := (others => (others => '0'));
 begin
 	
-	read_data1 <= registers(to_integer(unsigned(read_reg1))) when read_reg1 /= "00000" else (others => '0');
-	read_data2 <= registers(to_integer(unsigned(read_reg2))) when read_reg2 /= "00000" else (others => '0');
+	read_data1 <= write_data when (wreg = '1' and read_reg1 = write_reg) else 
+				registers(to_integer(unsigned(read_reg1))) when read_reg1 /= "00000" else
+				(others => '0');
+	read_data2 <= write_data when (wreg = '1' and read_reg2 = write_reg) else 
+				registers(to_integer(unsigned(read_reg2))) when read_reg2 /= "00000" else
+				(others => '0');
 
 	process(clk)
 	begin

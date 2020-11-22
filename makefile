@@ -32,7 +32,8 @@ datapath_EXTRA_VHD = $(VHD_FOLDER)/control.vhd \
 					 $(VHD_FOLDER)/dmemory.vhd \
 					 $(VHD_FOLDER)/imemory.vhd \
 					 $(VHD_FOLDER)/bshifter.vhd \
-					 $(VHD_FOLDER)/alu.vhd 
+					 $(VHD_FOLDER)/alu.vhd \
+					 $(VHD_FOLDER)/forwarding_unit.vhd
 
 
 
