@@ -18,7 +18,7 @@ entity dmemory is
 	);
 end entity dmemory;
 
-architecture RTL of dmemory is
+architecture behavioral of dmemory is
 	type memory_array is array((2**dmemory_width)-1 downto 0) of std_logic_vector(7 downto 0);
 	signal ram : memory_array := (others => (others => '0'));
 	
@@ -56,4 +56,4 @@ begin
 	
 	
 	
-end architecture RTL;
+end architecture behavioral;

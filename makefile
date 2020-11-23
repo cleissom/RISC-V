@@ -1,13 +1,3 @@
-# to install ghdl and gtkwave:
-#
-# sudo apt install gnat
-# git clone https://github.com/ghdl/ghdl.git
-# cd ghdl-master
-# ./configure --prefix=/usr/local
-# make
-# sudo make install
-# sudo apt install gtkwave
-
 VHD_FOLDER = ./src
 TB_FOLDER = ./src/tb
 SCRIPTS_FOLDER = ./src/scripts
@@ -22,6 +12,7 @@ GHDL_FLAGS = --ieee=synopsys --warn-no-vital-generic --workdir=simu --work=work 
 imemory_TIME = 50ns
 dmemory_TIME = 600ns
 regn_TIME = 40ns
+registers_TIME = 200ns
 alu_TIME = 80ns
 datapath_TIME = 1000ns
 

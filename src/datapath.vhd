@@ -18,8 +18,6 @@ architecture RTL of datapath is
 	signal branch_ctl: std_logic_vector(2 downto 0);
 	
 	
-
-	
 	-- IF
 	signal pc : std_logic_vector(31 downto 0);
 	signal pc_last : std_logic_vector(31 downto 0);
@@ -169,7 +167,7 @@ begin
 --
 -- INSTRUCTION DECODE STAGE (ID)
 --
--- 2nd stage, instruction decode, control unit operation, pipeline bubble insertion logic, register bank access
+-- 2nd stage, instruction decode, immediate generator, control unit operation, hazard detection unit, register bank access
 
 
 	-- instruction decode
@@ -212,6 +210,7 @@ begin
 	);
 	
 	
+	-- hazard detection unit
 	hazard_unit: entity work.hazard_unit
 		port map(
 			rs1         => rs1,

@@ -1,10 +1,8 @@
 [*]
 [*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
-[*] Mon Nov 23 18:05:20 2020
+[*] Mon Nov 23 19:31:41 2020
 [*]
-[dumpfile] "/home/cleissom/workspaceSigasi/RISC-V/imemory.vcd"
-[dumpfile_mtime] "Mon Nov 23 18:05:08 2020"
-[dumpfile_size] 1626
+[dumpfile] "(null)"
 [savefile] "/home/cleissom/workspaceSigasi/RISC-V/src/waves/imemory.gtkw"
 [timestart] 0
 [size] 1920 1016
@@ -12,14 +10,13 @@
 *-23.672386 1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] imemory_tb.
 [sst_width] 221
-[signals_width] 150
+[signals_width] 265
 [sst_expanded] 1
 [sst_vpaned_height] 289
+@29
+imemory_tb.clk
 @22
 imemory_tb.addr[31:0]
-@28
-imemory_tb.clk
-@23
 imemory_tb.read_data[31:0]
 [pattern_trace] 1
 [pattern_trace] 0

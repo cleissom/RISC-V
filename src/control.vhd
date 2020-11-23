@@ -1,4 +1,4 @@
--- control signals for HF-RISCV
+-- Control Signals
 --
 -- alu_op:                  alu_src1:               mem_write:		        jump:
 -- 0000 -> and              0 -> r[rs1]             00 -> no mem write      00 -> no jump
@@ -14,9 +14,9 @@
 -- 1010 -> srl                                                              100 -> bge
 -- 1011 -> don't care                                                       101 -> bltu
 -- 1100 -> sra                                                              110 -> bgeu
--- 1101 -> don't care       reg_write:              sig_read:               111 -> system
--- 1110 -> don't care       0 -> no write           0 -> unsigned
--- 1111 -> don't care       1 -> write register     1 -> signed
+-- 1101 -> don't care       reg_write:                                      111 -> system
+-- 1110 -> don't care       0 -> no write           
+-- 1111 -> don't care       1 -> write register     
 
 library ieee;
 use ieee.std_logic_1164.all;

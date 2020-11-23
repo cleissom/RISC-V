@@ -1,0 +1,37 @@
+[*]
+[*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
+[*] Mon Nov 23 19:28:36 2020
+[*]
+[dumpfile] "(null)"
+[savefile] "/home/cleissom/workspaceSigasi/RISC-V/src/waves/registers.gtkw"
+[timestart] 0
+[size] 1920 1016
+[pos] -1 -1
+*-24.680122 100200000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[sst_width] 221
+[signals_width] 307
+[sst_expanded] 1
+[sst_vpaned_height] 289
+@28
+[color] 3
+registers_tb.clk
+@200
+-
+@22
+registers_tb.read_data1[31:0]
+registers_tb.read_data2[31:0]
+@200
+-
+@22
+registers_tb.read_reg1[4:0]
+registers_tb.read_reg2[4:0]
+@200
+-
+@22
+registers_tb.write_reg[4:0]
+@28
+registers_tb.reg_write
+@22
+registers_tb.write_data[31:0]
+[pattern_trace] 1
+[pattern_trace] 0

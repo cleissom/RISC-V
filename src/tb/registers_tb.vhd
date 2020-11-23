@@ -27,7 +27,7 @@ begin
 			read_reg1  => read_reg1,
 			read_reg2  => read_reg2,
 			write_reg  => write_reg,
-			reg_write  => reg_write,
+			wreg  => reg_write,
 			write_data => write_data,
 			read_data1 => read_data1,
 			read_data2 => read_data2
@@ -46,14 +46,22 @@ begin
 	begin
 		read_reg1  <= std_logic_vector(to_unsigned(10, 5));
 		read_reg2  <= std_logic_vector(to_unsigned(11, 5));
-		write_reg  <= std_logic_vector(to_unsigned(11, 5));
+		write_reg  <= std_logic_vector(to_unsigned(12, 5));
 		write_data <= std_logic_vector(to_unsigned(20, data_width));
-		wait for 10 ns;
+		reg_write  <= '0';
+		wait for 5 ns;
 		reg_write  <= '1';
 		wait for 10 ns;
 		reg_write  <= '0';
 		wait for 10 ns;
-		
+		read_reg1  <= std_logic_vector(to_unsigned(12, 5));
+		read_reg2  <= std_logic_vector(to_unsigned(13, 5));
+		write_reg  <= std_logic_vector(to_unsigned(13, 5));
+		write_data <= std_logic_vector(to_unsigned(30, data_width));
+		reg_write  <= '1';
+		wait for 10 ns;
+		reg_write  <= '0';
+		wait for 5 ns;
 	end process;
 		
 end architecture RTL;
