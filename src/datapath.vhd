@@ -12,12 +12,12 @@ end entity datapath;
 
 architecture RTL of datapath is
 	-- control signals
-	signal reg_write_ctl, alu_src1_ctl, sig_read_ctl : std_logic;
+	signal reg_write_ctl, mem_to_reg, alu_src1_ctl : std_logic;
 	signal mem_write_ctl, mem_read_ctl, alu_src2_ctl, jump_ctl: std_logic_vector(1 downto 0);
 	signal alu_op_ctl: std_logic_vector(3 downto 0);
 	signal branch_ctl: std_logic_vector(2 downto 0);
 	
-	signal flush : std_logic;
+	
 
 	
 	-- IF
@@ -35,7 +35,6 @@ architecture RTL of datapath is
 	
 	
 	-- ID
-	signal inst_in_s: std_logic_vector(31 downto 0);
 	signal opcode, funct7: std_logic_vector(6 downto 0);
 	signal funct3: std_logic_vector(2 downto 0);
 	signal rs1, rs2, rd: std_logic_vector(4 downto 0);
@@ -74,7 +73,8 @@ architecture RTL of datapath is
 	signal alu_op_ctl_EX : std_logic_vector(3 downto 0);
 	signal pc_plus4_EX : std_logic_vector(31 downto 0);
 	signal rd_EX : std_logic_vector(4 downto 0);
-	signal reg_write_ctl_EX : std_logic;	
+	signal reg_write_ctl_EX : std_logic;
+	signal mem_to_reg_EX : std_logic;
 	signal branch_ctl_EX : std_logic_vector(2 downto 0);
 	signal mem_write_ctl_EX : std_logic_vector(1 downto 0);
 	signal mem_read_ctl_EX : std_logic_vector(1 downto 0);
@@ -85,6 +85,7 @@ architecture RTL of datapath is
 	
 	-- MEM
 	signal mem_read_data : std_logic_vector(31 downto 0) := (others => '0');
+	signal flush : std_logic;
 	
 	signal branch_ctl_MEM : std_logic_vector(2 downto 0);
 	signal branch_MEM : std_logic_vector(31 downto 0);
@@ -92,6 +93,7 @@ architecture RTL of datapath is
 	signal alu_result_MEM : std_logic_vector(31 downto 0);
 	signal rd_MEM : std_logic_vector(4 downto 0);
 	signal reg_write_ctl_MEM : std_logic;
+	signal mem_to_reg_MEM : std_logic;
 	signal forward_mux_b_MEM : std_logic_vector(31 downto 0);
 	signal mem_write_ctl_MEM : std_logic_vector(1 downto 0);
     signal mem_read_ctl_MEM : std_logic_vector(1 downto 0);
@@ -102,8 +104,13 @@ architecture RTL of datapath is
 	-- WB
 	signal rd_WB : std_logic_vector(4 downto 0);
 	signal reg_write_ctl_WB : std_logic;
+	signal mem_to_reg_WB : std_logic;
 	signal alu_result_WB : std_logic_vector(31 downto 0);
 	signal mem_read_data_WB : std_logic_vector(31 downto 0);
+	
+	
+	
+	
 	
 begin
 	
@@ -163,26 +170,21 @@ begin
 -- INSTRUCTION DECODE STAGE (ID)
 --
 -- 2nd stage, instruction decode, control unit operation, pipeline bubble insertion logic, register bank access
-	
-	
-	-- pipeline bubble insertion on loads/stores, branches
-	inst_in_s <= x"00000000" when stall_reg = '1' or branch_taken = '1' else
-		inst_in_ID;
 
 
 	-- instruction decode
-	opcode <= inst_in_s(6 downto 0);
-	funct3 <= inst_in_s(14 downto 12);
-	funct7 <= inst_in_s(31 downto 25);
-	rd <= inst_in_s(11 downto 7);
-	rs1 <= inst_in_s(19 downto 15);
-	rs2 <= inst_in_s(24 downto 20);
-	imm_i <= ext32(31 downto 12) & inst_in_s(31 downto 20);
-	imm_s <= ext32(31 downto 12) & inst_in_s(31 downto 25) & inst_in_s(11 downto 7);
-	imm_sb <= ext32(31 downto 13) & inst_in_s(31) & inst_in_s(7) & inst_in_s(30 downto 25) & inst_in_s(11 downto 8) & '0';
-	imm_u <= inst_in_s(31 downto 12) & x"000";
-	imm_uj <= ext32(31 downto 21) & inst_in_s(31) & inst_in_s(19 downto 12) & inst_in_s(20) & inst_in_s(30 downto 21) & '0';
-	ext32 <= (others => '1') when inst_in_s(31) = '1' else (others => '0');
+	opcode <= inst_in_ID(6 downto 0);
+	funct3 <= inst_in_ID(14 downto 12);
+	funct7 <= inst_in_ID(31 downto 25);
+	rd <= inst_in_ID(11 downto 7);
+	rs1 <= inst_in_ID(19 downto 15);
+	rs2 <= inst_in_ID(24 downto 20);
+	imm_i <= ext32(31 downto 12) & inst_in_ID(31 downto 20);
+	imm_s <= ext32(31 downto 12) & inst_in_ID(31 downto 25) & inst_in_ID(11 downto 7);
+	imm_sb <= ext32(31 downto 13) & inst_in_ID(31) & inst_in_ID(7) & inst_in_ID(30 downto 25) & inst_in_ID(11 downto 8) & '0';
+	imm_u <= inst_in_ID(31 downto 12) & x"000";
+	imm_uj <= ext32(31 downto 21) & inst_in_ID(31) & inst_in_ID(19 downto 12) & inst_in_ID(20) & inst_in_ID(30 downto 21) & '0';
+	ext32 <= (others => '1') when inst_in_ID(31) = '1' else (others => '0');
 	
 	
 	-- immediate generator
@@ -199,14 +201,14 @@ begin
 			funct3 => funct3,
 			funct7 => funct7,
 			reg_write => reg_write_ctl,
+			mem_to_reg => mem_to_reg,
 			alu_src1 => alu_src1_ctl,
 			alu_src2 => alu_src2_ctl,
 			alu_op => alu_op_ctl,
 			branch => branch_ctl,
 			jump => jump_ctl,
 			mem_write => mem_write_ctl,
-			mem_read => mem_read_ctl,
-			sig_read => sig_read_ctl
+			mem_read => mem_read_ctl
 	);
 	
 	
@@ -253,6 +255,7 @@ begin
 			branch_ctl_EX <= (others => '0');
 			jump_ctl_EX <= (others => '0');
 			reg_write_ctl_EX <= '0';
+			mem_to_reg_EX <= '0';
 			mem_read_ctl_EX <= (others => '0');
 			mem_write_ctl_EX <= (others => '0');
 			
@@ -276,6 +279,7 @@ begin
 				branch_ctl_EX <= branch_ctl;
 				jump_ctl_EX <= jump_ctl;
 				reg_write_ctl_EX <= reg_write_ctl;
+				mem_to_reg_EX <= mem_to_reg;
 				mem_read_ctl_EX <= mem_read_ctl;
 				mem_write_ctl_EX <= mem_write_ctl;
 			when others =>
@@ -285,6 +289,7 @@ begin
 				branch_ctl_EX <= (others => '0');
 				jump_ctl_EX <= (others => '0');
 				reg_write_ctl_EX <= '0';
+				mem_to_reg_EX <= '0';
 				mem_read_ctl_EX <= (others => '0');
 				mem_write_ctl_EX <= (others => '0');
 			end case;
@@ -363,6 +368,7 @@ begin
 			rd_MEM <= (others => '0');
 			forward_mux_b_MEM <= (others => '0');
 			reg_write_ctl_MEM <= '0';
+			mem_to_reg_MEM <= '0';
 			mem_read_ctl_MEM <= (others => '0');
             mem_write_ctl_MEM <= (others => '0');
             jump_ctl_MEM <= (others => '0');
@@ -375,6 +381,7 @@ begin
 			rd_MEM <= rd_EX;
 			forward_mux_b_MEM <= forward_mux_b;
 			reg_write_ctl_MEM <= reg_write_ctl_EX;
+			mem_to_reg_MEM <= mem_to_reg_EX;
 			mem_read_ctl_MEM <= mem_read_ctl_EX;
             mem_write_ctl_MEM <= mem_write_ctl_EX;
             jump_ctl_MEM <= jump_ctl_EX;
@@ -426,11 +433,13 @@ begin
             alu_result_WB <= (others => '0');
             rd_WB <= (others => '0');
             reg_write_ctl_WB <= '0';
+            mem_to_reg_WB <= '0';
         elsif rising_edge(clock) then
             mem_read_data_WB <= mem_read_data;
             alu_result_WB <= alu_result_MEM;
             rd_WB <= rd_MEM;
             reg_write_ctl_WB <= reg_write_ctl_MEM;
+            mem_to_reg_WB <= mem_to_reg_MEM;
         end if;
     end process;
     
@@ -442,7 +451,7 @@ begin
 -- 5th stage, write back
 	
 	-- write back
-	reg_write_data <=  mem_read_data_WB when  reg_write_ctl_WB = '0' else
+	reg_write_data <=  mem_read_data_WB when  mem_to_reg_WB = '1' else
 	                   alu_result_WB;
 	
 	

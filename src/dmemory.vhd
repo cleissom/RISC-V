@@ -25,11 +25,11 @@ architecture RTL of dmemory is
 begin
 
 	
-	process (clk)
+	process (clk, mem_read)
 		variable block_addr : std_logic_vector(dmemory_width-1 downto 0);
 		variable byte_addr : std_logic_vector(1 downto 0);
 		begin
-		if rising_edge(clk) then
+		if rising_edge(clk) or mem_read = '1' then
 			block_addr := addr(dmemory_width-1 downto 2) & "00";
 			byte_addr := addr(1 downto 0);
 			if mem_write = '1' then
@@ -41,7 +41,8 @@ begin
 					ram(to_integer(unsigned(block_addr))+2) <= write_data(23 downto 16);
 					ram(to_integer(unsigned(block_addr))+3) <= write_data(31 downto 24);
 				end if;
-			elsif mem_read = '1' then
+			end if;
+			if mem_read = '1' then
 				if read_byte = '1' then
 					read_data <= x"000000" & ram(to_integer(unsigned(block_addr)) + to_integer(unsigned(byte_addr)));
 				else
