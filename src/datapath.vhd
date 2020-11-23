@@ -92,7 +92,7 @@ architecture RTL of datapath is
 	signal alu_result_MEM : std_logic_vector(31 downto 0);
 	signal rd_MEM : std_logic_vector(4 downto 0);
 	signal reg_write_ctl_MEM : std_logic;
-	signal reg_read_data2_MEM : std_logic_vector(31 downto 0);
+	signal forward_mux_b_MEM : std_logic_vector(31 downto 0);
 	signal mem_write_ctl_MEM : std_logic_vector(1 downto 0);
     signal mem_read_ctl_MEM : std_logic_vector(1 downto 0);
 	signal jump_ctl_MEM : std_logic_vector(1 downto 0);
@@ -114,18 +114,14 @@ begin
 -- 1st stage, instruction memory access, PC update
 	
 	-- program counter logic
-	process(clock, reset, stall_reg)
+	process(clock, reset)
 	begin
 		if reset = '1' then
 			pc <= (others => '0');
 			pc_last <= (others => '0');
-		elsif rising_edge(clock) then
-			if stall_reg = '0' then
+		elsif rising_edge(clock) and stall = '0' then
 				pc <= pc_next;
-			else
-				pc <= pc_last;
-			end if;
-			pc_last <= pc;
+
 		end if;
 	end process;
 	
@@ -154,7 +150,7 @@ begin
 			inst_in_ID <= (others => '0');
 			pc_ID <= (others => '0');
 			pc_plus4_ID <= (others => '0');
-		elsif rising_edge(clock) then
+		elsif rising_edge(clock) and stall = '0' then
 			inst_in_ID <= inst_in;
 			pc_ID <= pc;
 			pc_plus4_ID <= pc_plus4;
@@ -213,6 +209,15 @@ begin
 			sig_read => sig_read_ctl
 	);
 	
+	
+	hazard_unit: entity work.hazard_unit
+		port map(
+			rs1         => rs1,
+			rs2         => rs2,
+			rd_EX       => rd_EX,
+			mem_read_EX => mem_read_ctl_EX(0),
+			stall       => stall
+		);
 
 	-- register bank
 	register_bank: entity work.registers
@@ -240,30 +245,49 @@ begin
 			rd_EX <= (others => '0');
 			immediate_EX <= (others => '0');
 			pc_EX <= (others => '0');
+			pc_plus4_EX <= (others => '0');
+			
 			alu_src1_ctl_EX <= '0';
 			alu_src2_ctl_EX <= (others => '0');
 			alu_op_ctl_EX <= (others => '0');
 			branch_ctl_EX <= (others => '0');
+			jump_ctl_EX <= (others => '0');
 			reg_write_ctl_EX <= '0';
 			mem_read_ctl_EX <= (others => '0');
 			mem_write_ctl_EX <= (others => '0');
-			jump_ctl_EX <= (others => '0');
-			pc_plus4_EX <= (others => '0');
+			
+			rs1_EX <= (others => '0');
+			rs2_EX <= (others => '0');
+			
 		elsif rising_edge(clock) then
 			reg_read_data1_EX <= reg_read_data1;
 			reg_read_data2_EX <= reg_read_data2;
 			rd_EX <= rd;
 			immediate_EX <= immediate;
 			pc_EX <= pc_ID;
-			alu_src1_ctl_EX <= alu_src1_ctl;
-			alu_src2_ctl_EX <= alu_src2_ctl;
-			alu_op_ctl_EX <= alu_op_ctl;
-			branch_ctl_EX <= branch_ctl;
-			reg_write_ctl_EX <= reg_write_ctl;
-			mem_read_ctl_EX <= mem_read_ctl;
-			mem_write_ctl_EX <= mem_write_ctl;
-			jump_ctl_EX <= jump_ctl;
 			pc_plus4_EX <= pc_plus4_ID;
+			
+			-- control signals (hazard mux)
+			case stall is
+			when '0' =>
+				alu_src1_ctl_EX <= alu_src1_ctl;
+				alu_src2_ctl_EX <= alu_src2_ctl;
+				alu_op_ctl_EX <= alu_op_ctl;
+				branch_ctl_EX <= branch_ctl;
+				jump_ctl_EX <= jump_ctl;
+				reg_write_ctl_EX <= reg_write_ctl;
+				mem_read_ctl_EX <= mem_read_ctl;
+				mem_write_ctl_EX <= mem_write_ctl;
+			when others =>
+				alu_src1_ctl_EX <= '0';
+				alu_src2_ctl_EX <= (others => '0');
+				alu_op_ctl_EX <= (others => '0');
+				branch_ctl_EX <= (others => '0');
+				jump_ctl_EX <= (others => '0');
+				reg_write_ctl_EX <= '0';
+				mem_read_ctl_EX <= (others => '0');
+				mem_write_ctl_EX <= (others => '0');
+			end case;
 			
 			-- forwarding
 			rs1_EX <= rs1;
@@ -282,8 +306,8 @@ begin
 	-- forwarding unit
 	forwarding_unit: entity work.forwarding_unit
 		port map(
-			rs1           => rs1_EX,
-			rs2           => rs2_EX,
+			rs1_EX           => rs1_EX,
+			rs2_EX           => rs2_EX,
 			rd_MEM        => rd_MEM,
 			reg_write_MEM => reg_write_ctl_MEM,
 			rd_WB         => rd_WB,
@@ -337,7 +361,7 @@ begin
 			zero_MEM <= '0';
 			branch_ctl_MEM <= (others => '0');
 			rd_MEM <= (others => '0');
-			reg_read_data2_MEM <= (others => '0');
+			forward_mux_b_MEM <= (others => '0');
 			reg_write_ctl_MEM <= '0';
 			mem_read_ctl_MEM <= (others => '0');
             mem_write_ctl_MEM <= (others => '0');
@@ -349,7 +373,7 @@ begin
 			zero_MEM <= zero;
 			branch_ctl_MEM <= branch_ctl_EX;
 			rd_MEM <= rd_EX;
-			reg_read_data2_MEM <= reg_read_data2_EX;
+			forward_mux_b_MEM <= forward_mux_b;
 			reg_write_ctl_MEM <= reg_write_ctl_EX;
 			mem_read_ctl_MEM <= mem_read_ctl_EX;
             mem_write_ctl_MEM <= mem_write_ctl_EX;
@@ -389,7 +413,7 @@ begin
 	        mem_read   => mem_read_ctl_MEM(0),
 	        read_byte   => mem_read_ctl_MEM(1),
 	        addr       => alu_result_MEM(dmemory_width-1 downto 0),
-	        write_data => reg_read_data2_MEM,
+	        write_data => forward_mux_b_MEM,
 	        read_data  => mem_read_data
 	    );
 

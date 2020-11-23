@@ -4,8 +4,8 @@ use ieee.numeric_std.all;
 
 entity forwarding_unit is
 	port(
-		rs1 : in std_logic_vector(4 downto 0);
-		rs2 : in std_logic_vector(4 downto 0);
+		rs1_EX : in std_logic_vector(4 downto 0);
+		rs2_EX : in std_logic_vector(4 downto 0);
 		
 		rd_MEM : in std_logic_vector(4 downto 0);
 		reg_write_MEM : in std_logic;
@@ -21,15 +21,15 @@ end entity forwarding_unit;
 architecture RTL of forwarding_unit is
 	
 begin
-	forward_a <= "01" when (reg_write_MEM = '1' and rd_MEM /= "00000") and (rd_MEM = rs1) else
+	forward_a <= "01" when (reg_write_MEM = '1' and rd_MEM /= "00000") and (rd_MEM = rs1_EX) else
 				 "10" when (reg_write_WB = '1' and rd_WB /= "00000") 
-							and not(reg_write_MEM = '1' and rd_MEM /= "00000" and rd_MEM = rs1) 
-							and (rd_WB = rs1) else
+							and not(reg_write_MEM = '1' and rd_MEM /= "00000" and rd_MEM = rs1_EX) 
+							and (rd_WB = rs1_EX) else
 				"00";
 				
-	forward_b <= "01" when (reg_write_MEM = '1' and rd_MEM /= "00000") and (rd_MEM = rs2) else
+	forward_b <= "01" when (reg_write_MEM = '1' and rd_MEM /= "00000") and (rd_MEM = rs2_EX) else
 				 "10" when (reg_write_WB = '1' and rd_WB /= "00000") 
-							and not(reg_write_MEM = '1' and rd_MEM /= "00000" and rd_MEM = rs2) 
-							and (rd_WB = rs2) else
+							and not(reg_write_MEM = '1' and rd_MEM /= "00000" and rd_MEM = rs2_EX) 
+							and (rd_WB = rs2_EX) else
 				"00";
 end architecture RTL;

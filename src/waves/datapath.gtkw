@@ -1,13 +1,13 @@
 [*]
 [*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
-[*] Sun Nov 22 19:16:03 2020
+[*] Mon Nov 23 01:17:58 2020
 [*]
 [dumpfile] "(null)"
 [savefile] "/home/cleissom/workspaceSigasi/RISC-V/src/waves/datapath.gtkw"
 [timestart] 0
 [size] 1920 1016
 [pos] 0 27
-*-25.049471 80000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-25.049471 75000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] datapath_tb.
 [sst_width] 221
 [signals_width] 319
@@ -15,9 +15,7 @@
 [sst_vpaned_height] 318
 @22
 datapath_tb.dut.alu_op_ctl[3:0]
-@23
 datapath_tb.dut.alu_op_ctl_ex[3:0]
-@22
 datapath_tb.dut.alu_result[31:0]
 datapath_tb.dut.alu_result_mem[31:0]
 datapath_tb.dut.alu_result_wb[31:0]
@@ -27,6 +25,10 @@ datapath_tb.dut.alu_src1_ctl
 datapath_tb.dut.alu_src1_ctl_ex
 @22
 datapath_tb.dut.alu_src2[31:0]
+@28
+datapath_tb.dut.alu_src2_ctl[1:0]
+datapath_tb.dut.alu_src2_ctl_ex[1:0]
+@22
 datapath_tb.dut.branch[31:0]
 @28
 datapath_tb.dut.branch_ctl[2:0]
@@ -38,7 +40,6 @@ datapath_tb.dut.branch_src1[31:0]
 datapath_tb.dut.branch_src2[31:0]
 @28
 datapath_tb.dut.branch_taken
-datapath_tb.dut.byte_addr[1:0]
 datapath_tb.dut.clock
 @22
 datapath_tb.dut.ext32[31:12]
@@ -60,6 +61,7 @@ datapath_tb.dut.imm_u[31:0]
 datapath_tb.dut.imm_uj[31:0]
 datapath_tb.dut.immediate[31:0]
 datapath_tb.dut.immediate_ex[31:0]
+[color] 2
 datapath_tb.dut.inst_in[31:0]
 datapath_tb.dut.inst_in_id[31:0]
 datapath_tb.dut.inst_in_s[31:0]
@@ -72,10 +74,10 @@ datapath_tb.dut.less_than
 datapath_tb.dut.less_than_mem
 datapath_tb.dut.mem_read_ctl[1:0]
 datapath_tb.dut.mem_read_ctl_ex[1:0]
+@29
 datapath_tb.dut.mem_read_ctl_mem[1:0]
 @22
 datapath_tb.dut.mem_read_data[31:0]
-datapath_tb.dut.mem_read_data_block[31:0]
 datapath_tb.dut.mem_read_data_wb[31:0]
 @28
 datapath_tb.dut.mem_write_ctl[1:0]
@@ -84,12 +86,15 @@ datapath_tb.dut.mem_write_ctl_mem[1:0]
 datapath_tb.dut.mwait
 @22
 datapath_tb.dut.opcode[6:0]
+[color] 3
 datapath_tb.dut.pc[31:0]
-datapath_tb.dut.pc_ex[31:0]
 datapath_tb.dut.pc_id[31:0]
+datapath_tb.dut.pc_ex[31:0]
 datapath_tb.dut.pc_last[31:0]
 datapath_tb.dut.pc_next[31:0]
 datapath_tb.dut.pc_plus4[31:0]
+datapath_tb.dut.pc_plus4_ex[31:0]
+datapath_tb.dut.pc_plus4_id[31:0]
 datapath_tb.dut.rd[4:0]
 datapath_tb.dut.rd_ex[4:0]
 datapath_tb.dut.rd_mem[4:0]
@@ -98,7 +103,6 @@ datapath_tb.dut.reg_read_data1[31:0]
 datapath_tb.dut.reg_read_data1_ex[31:0]
 datapath_tb.dut.reg_read_data2[31:0]
 datapath_tb.dut.reg_read_data2_ex[31:0]
-datapath_tb.dut.reg_read_data2_mem[31:0]
 @28
 datapath_tb.dut.reg_write_ctl
 datapath_tb.dut.reg_write_ctl_ex
