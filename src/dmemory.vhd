@@ -18,42 +18,130 @@ entity dmemory is
 	);
 end entity dmemory;
 
-architecture behavioral of dmemory is
+architecture RTL of dmemory is
 	type memory_array is array((2**dmemory_width)-1 downto 0) of std_logic_vector(7 downto 0);
 	signal ram : memory_array := (others => (others => '0'));
 	
+	signal bram_addr : std_logic_vector(dmemory_width - 1 downto 2);
+	
+	signal byte_data : std_logic_vector(7 downto 0);
+	signal word_data : std_logic_vector(31 downto 0);
+	
+	signal data_o_block0 : std_logic_vector(7 downto 0);
+	signal data_o_block1 : std_logic_vector(7 downto 0);
+	signal data_o_block2 : std_logic_vector(7 downto 0);
+	signal data_o_block3 : std_logic_vector(7 downto 0);
+	signal data_i_block0 : std_logic_vector(7 downto 0);
+	signal data_i_block1 : std_logic_vector(7 downto 0);
+	signal data_i_block2 : std_logic_vector(7 downto 0);
+	signal data_i_block3 : std_logic_vector(7 downto 0);
+	
+	signal byte_addr : std_logic_vector(1 downto 0);
+	
+	signal cs_n_0 : std_logic;
+	signal cs_n_1 : std_logic;
+	signal cs_n_2 : std_logic;
+	signal cs_n_3 : std_logic;
+	
+	signal we_n : std_logic;
+	
+	signal read_data_internal : std_logic_vector(31 downto 0);
+	
 begin
-
 	
-	process (clk, mem_read)
-		variable block_addr : std_logic_vector(dmemory_width-1 downto 0);
-		variable byte_addr : std_logic_vector(1 downto 0);
-		begin
-		if rising_edge(clk) or mem_read = '1' then
-			block_addr := addr(dmemory_width-1 downto 2) & "00";
-			byte_addr := addr(1 downto 0);
-			if mem_write = '1' then
-				if write_byte = '1' then
-					ram(to_integer(unsigned(addr))) <= write_data(7 downto 0);
-				else				
-					ram(to_integer(unsigned(block_addr))) <= write_data(7 downto 0);
-					ram(to_integer(unsigned(block_addr))+1) <= write_data(15 downto 8);
-					ram(to_integer(unsigned(block_addr))+2) <= write_data(23 downto 16);
-					ram(to_integer(unsigned(block_addr))+3) <= write_data(31 downto 24);
-				end if;
-			end if;
-			if mem_read = '1' then
-				if read_byte = '1' then
-					read_data <= x"000000" & ram(to_integer(unsigned(block_addr)) + to_integer(unsigned(byte_addr)));
-				else
-					read_data <= ram(to_integer(unsigned(block_addr))+3) & ram(to_integer(unsigned(block_addr))+2) & ram(to_integer(unsigned(block_addr))+1) & ram(to_integer(unsigned(block_addr)));
-				end if;
-			end if;
-		end if;
-	end process;
+	byte_addr <= addr(1 downto 0);
 	
-
+	byte_data <= data_o_block1 when byte_addr = "01" else
+				data_o_block2 when byte_addr = "10" else
+				data_o_block3 when byte_addr = "11" else
+				data_o_block0;
+				
+	word_data <= data_o_block3 & data_o_block2 & data_o_block1 & data_o_block0;
+	
+	read_data_internal <=  word_data when read_byte = '0' else
+				x"000000" & byte_data;
+				
+	read_data <=  read_data_internal when mem_read = '1';
+	
+	data_i_block0 <= write_data(7 downto 0);
+	data_i_block1 <= write_data(7 downto 0) when write_byte = '1' else
+					write_data(15 downto 8);
+	data_i_block2 <= write_data(7 downto 0) when write_byte = '1' else
+					write_data(23 downto 16);
+	data_i_block3 <= write_data(7 downto 0) when write_byte = '1' else
+					write_data(31 downto 24);
+	
+	cs_n_0 <= '0' when (write_byte = '1' and byte_addr = "00") or write_byte = '0' else
+			'1';
+	cs_n_1 <= '0' when (write_byte = '1' and byte_addr = "01") or write_byte = '0' else
+			'1';
+	cs_n_2 <= '0' when (write_byte = '1' and byte_addr = "10") or write_byte = '0' else
+			'1';
+	cs_n_3 <= '0' when (write_byte = '1' and byte_addr = "11") or write_byte = '0' else
+			'1';
+	
+	bram_addr <= addr(dmemory_width - 1 downto 2);
+	we_n <= not mem_write;
+	
+	block0: entity work.bram
+		generic map(
+			data_width    => 8,
+			address_width => dmemory_width,
+			bank          => 0
+		)
+		port map(
+			clk    => clk,
+			addr   => bram_addr,
+			cs_n   => cs_n_0,
+			we_n   => we_n,
+			data_i => data_i_block0,
+			data_o => data_o_block0
+		);
+		
+	block1: entity work.bram
+		generic map(
+			data_width    => 8,
+			address_width => dmemory_width,
+			bank          => 1
+		)
+		port map(
+			clk    => clk,
+			addr   => bram_addr,
+			cs_n   => cs_n_1,
+			we_n   => we_n,
+			data_i => data_i_block1,
+			data_o => data_o_block1
+		);
+		
+	block2: entity work.bram
+		generic map(
+			data_width    => 8,
+			address_width => dmemory_width,
+			bank          => 2
+		)
+		port map(
+			clk    => clk,
+			addr   => bram_addr,
+			cs_n   => cs_n_2,
+			we_n   => we_n,
+			data_i => data_i_block2,
+			data_o => data_o_block2
+		);
+		
+	block3: entity work.bram
+		generic map(
+			data_width    => 8,
+			address_width => dmemory_width,
+			bank          => 3
+		)
+		port map(
+			clk    => clk,
+			addr   => bram_addr,
+			cs_n   => cs_n_3,
+			we_n   => we_n,
+			data_i => data_i_block3,
+			data_o => data_o_block3
+		);
 	
 	
-	
-end architecture behavioral;
+end architecture RTL;

@@ -2,7 +2,7 @@
 
 ## Sobre
 
-Projeto e Implementação de didática de um softcore RISC-V
+Projeto e Implementação didática de um softcore RISC-V
 
 Este projeto é baseado na estrutura apresentada no livro *Computer Organization and Design: The Hardware Software Interface [RISC-V Edition]* de Patterson e Hennessy e tem como projeto base o [HF-RISC SoC](https://github.com/sjohann81/hf-risc).
 
@@ -11,6 +11,8 @@ Este projeto é baseado na estrutura apresentada no livro *Computer Organization
 Este projeto possui as seguintes alterações do projeto utilizado como base:
 
 * Modificação da estrutura para um pipeline de 5 estágios
+
+* Modificação da Unidade de Controle para a nova estrutura
 
 * Separação da Memória de Dados e da Memória de Instruções
 
@@ -53,6 +55,24 @@ A simulação e a forma de onda do datapath completo pode ser obtida pelo comand
 
 ```
 make datapath
+```
+
+
+
+## Como Sintetizar
+
+Para sintetizar é necessário utilizar os comandos `make` que alteram a definição no arquivo `datapath.vhd` de qual arquitetura da memória de dados utilizar.
+
+Para alterar a arquitetura para a utilização da **síntese** no Quartus:
+
+```
+make synthesis
+```
+
+Para alterar a arquitetura para a utilização da **simulação**:
+
+```
+make bahavioral
 ```
 
 

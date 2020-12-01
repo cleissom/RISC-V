@@ -218,6 +218,7 @@ begin
 						alu_src2 <= "01";
 						alu_op <= "0000";
 						branch <= "000";
+						jump <= "00";
 						mem_write <= "00";
 						mem_read <= "00";
 				end case;

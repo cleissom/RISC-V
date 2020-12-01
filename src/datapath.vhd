@@ -6,7 +6,8 @@ use work.constants.all;
 entity datapath is
 	port(
 		clock : in std_logic;
-		reset : in std_logic
+		reset : in std_logic;
+		debug: out std_logic
 	);
 end entity datapath;
 
@@ -16,7 +17,6 @@ architecture RTL of datapath is
 	signal mem_write_ctl, mem_read_ctl, alu_src2_ctl, jump_ctl: std_logic_vector(1 downto 0);
 	signal alu_op_ctl: std_logic_vector(3 downto 0);
 	signal branch_ctl: std_logic_vector(2 downto 0);
-	
 	
 	-- IF
 	signal pc : std_logic_vector(31 downto 0);
@@ -137,12 +137,13 @@ begin
 
 
 	-- instruction memory
-	imemory: entity work.imemory
+	imemory: entity work.imemory(rtl)
 		generic map(
 			memory_file  => memory_file,
 			imemory_width => imemory_width
 		)
 		port map(
+			clk => clock,
 			addr   => pc(imemory_width-1 downto 0),
 			data_o => inst_in
 		);
@@ -190,7 +191,8 @@ begin
 				 imm_s  when opcode = "0100011" else -- S
 				 imm_sb when opcode = "1100011" else -- SB
 				 imm_u  when opcode = "0100111" else -- U
-				 imm_uj when opcode = "1101111";     -- UJ
+				 imm_uj when opcode = "1101111" else -- UJ
+				 imm_i;  -- when others   
 				
 	
 	-- control unit
@@ -453,5 +455,6 @@ begin
 	reg_write_data <=  mem_read_data_WB when  mem_to_reg_WB = '1' else
 	                   alu_result_WB;
 	
+	debug <= '0' when reg_write_data(0) = '0' else '1';
 	
 end architecture RTL;

@@ -18,8 +18,11 @@ datapath_TIME = 1000ns
 
 alu_EXTRA_VHD = $(VHD_FOLDER)/bshifter.vhd
 
+dmemory_EXTRA_VHD = $(VHD_FOLDER)/ram.vhd
+
 datapath_EXTRA_VHD = $(VHD_FOLDER)/control.vhd \
 					 $(VHD_FOLDER)/registers.vhd \
+					 $(VHD_FOLDER)/ram.vhd \
 					 $(VHD_FOLDER)/dmemory.vhd \
 					 $(VHD_FOLDER)/imemory.vhd \
 					 $(VHD_FOLDER)/bshifter.vhd \
@@ -46,6 +49,12 @@ code:
 	@ hexdump -v -e '4/1 "%02x" "\n"' code.bin > code.txt
 
 
+
+behavioral:
+	@ sed -i 's/imemory(rtl)/imemory(behavioral)/g' $(VHD_FOLDER)/datapath.vhd
+
+synthesis:
+	@ sed -i 's/imemory(behavioral)/imemory(rtl)/g' $(VHD_FOLDER)/datapath.vhd
 
 clean-ghdl:
 	@ rm -rf simu

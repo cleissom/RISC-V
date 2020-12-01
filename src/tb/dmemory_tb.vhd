@@ -33,14 +33,14 @@ begin
 			dmemory_width => dmemory_width
 		)
 		port map(
-			clk        => clk,
-			mem_write  => mem_write,
-			mem_read   => mem_read,
+			clk => clk,
+			mem_write => mem_write,
 			write_byte => write_byte,
+			mem_read => mem_read,
 			read_byte => read_byte,
-			addr       => addr(dmemory_width-1 downto 0),
+			addr => addr(dmemory_width-1 downto 0),
 			write_data => write_data,
-			read_data  => read_data
+			read_data => read_data
 		);
 		
 	stimulus : process
@@ -49,6 +49,8 @@ begin
 		mem_read <= '0';
 		write_byte <= '0';
 		read_byte  <= '0';
+		addr <= std_logic_vector(to_unsigned(0, data_width));
+		write_data <= std_logic_vector(to_signed(0, data_width));
 		wait for 5 ns;
 		addr <= std_logic_vector(to_unsigned(4, data_width));
 		write_data <= std_logic_vector(to_signed(10, data_width));

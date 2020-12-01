@@ -1,6 +1,6 @@
 [*]
 [*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
-[*] Mon Nov 23 19:30:13 2020
+[*] Mon Nov 23 22:41:11 2020
 [*]
 [dumpfile] "(null)"
 [savefile] "/home/cleissom/workspaceSigasi/RISC-V/src/waves/dmemory.gtkw"
@@ -20,10 +20,12 @@ dmemory_tb.clk
 -
 @22
 dmemory_tb.addr[31:0]
-@29
+@28
 dmemory_tb.mem_read
 @22
 dmemory_tb.read_data[31:0]
+@29
+dmemory_tb.read_byte
 @200
 -
 @28
