@@ -106,11 +106,18 @@ architecture RTL of datapath is
 	signal alu_result_WB : std_logic_vector(31 downto 0);
 	signal mem_read_data_WB : std_logic_vector(31 downto 0);
 	
+	-- DEBUG
+	signal id_op : op_t := nop;
+	signal ex_op : op_t := nop;
+	signal mem_op : op_t := nop;
+	signal wb_op : op_t := nop;
+	
 	
 	
 	
 	
 begin
+	
 	
 --
 --
@@ -137,7 +144,7 @@ begin
 
 
 	-- instruction memory
-	imemory: entity work.imemory(rtl)
+	imemory: entity work.imemory(behavioral)
 		generic map(
 			memory_file  => memory_file,
 			imemory_width => imemory_width
@@ -197,7 +204,8 @@ begin
 	
 	-- control unit
 	control_unit: entity work.control
-	port map(	opcode => opcode,
+	port map(	
+			opcode => opcode,
 			funct3 => funct3,
 			funct7 => funct7,
 			reg_write => reg_write_ctl,
@@ -208,7 +216,8 @@ begin
 			branch => branch_ctl,
 			jump => jump_ctl,
 			mem_write => mem_write_ctl,
-			mem_read => mem_read_ctl
+			mem_read => mem_read_ctl,
+			op_debug => id_op
 	);
 	
 	
@@ -263,6 +272,8 @@ begin
 			rs1_EX <= (others => '0');
 			rs2_EX <= (others => '0');
 			
+			ex_op <= nop;
+			
 		elsif rising_edge(clock) then
 			reg_read_data1_EX <= reg_read_data1;
 			reg_read_data2_EX <= reg_read_data2;
@@ -283,6 +294,7 @@ begin
 				mem_to_reg_EX <= mem_to_reg;
 				mem_read_ctl_EX <= mem_read_ctl;
 				mem_write_ctl_EX <= mem_write_ctl;
+				ex_op <= id_op;
 			when others =>
 				alu_src1_ctl_EX <= '0';
 				alu_src2_ctl_EX <= (others => '0');
@@ -293,6 +305,7 @@ begin
 				mem_to_reg_EX <= '0';
 				mem_read_ctl_EX <= (others => '0');
 				mem_write_ctl_EX <= (others => '0');
+				ex_op <= nop;
 			end case;
 			
 			-- forwarding
@@ -374,6 +387,7 @@ begin
             mem_write_ctl_MEM <= (others => '0');
             jump_ctl_MEM <= (others => '0');
             less_than_MEM <= '0';
+            mem_op <= nop;
 		elsif rising_edge(clock) then
 		    alu_result_MEM <= alu_result;
 			branch_MEM <= branch;
@@ -387,6 +401,7 @@ begin
             mem_write_ctl_MEM <= mem_write_ctl_EX;
             jump_ctl_MEM <= jump_ctl_EX;
             less_than_MEM <= less_than;
+            mem_op <= ex_op;
 		end if;
 	end process;
 	
@@ -435,12 +450,14 @@ begin
             rd_WB <= (others => '0');
             reg_write_ctl_WB <= '0';
             mem_to_reg_WB <= '0';
+            wb_op <= nop;
         elsif rising_edge(clock) then
             mem_read_data_WB <= mem_read_data;
             alu_result_WB <= alu_result_MEM;
             rd_WB <= rd_MEM;
             reg_write_ctl_WB <= reg_write_ctl_MEM;
             mem_to_reg_WB <= mem_to_reg_MEM;
+            wb_op <= mem_op;
         end if;
     end process;
     

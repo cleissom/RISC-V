@@ -16,19 +16,22 @@ registers_TIME = 200ns
 alu_TIME = 80ns
 datapath_TIME = 1000ns
 
+
+
+
 alu_EXTRA_VHD = $(VHD_FOLDER)/bshifter.vhd
 
 dmemory_EXTRA_VHD = $(VHD_FOLDER)/ram.vhd
 
-datapath_EXTRA_VHD = $(VHD_FOLDER)/control.vhd \
-					 $(VHD_FOLDER)/registers.vhd \
-					 $(VHD_FOLDER)/ram.vhd \
-					 $(VHD_FOLDER)/dmemory.vhd \
-					 $(VHD_FOLDER)/imemory.vhd \
-					 $(VHD_FOLDER)/bshifter.vhd \
-					 $(VHD_FOLDER)/alu.vhd \
-					 $(VHD_FOLDER)/forwarding_unit.vhd \
-					 $(VHD_FOLDER)/hazard_unit.vhd
+datapath_EXTRA_VHD = 	$(VHD_FOLDER)/control.vhd \
+			$(VHD_FOLDER)/registers.vhd \
+			$(VHD_FOLDER)/ram.vhd \
+			$(VHD_FOLDER)/dmemory.vhd \
+			$(VHD_FOLDER)/imemory.vhd \
+			$(VHD_FOLDER)/bshifter.vhd \
+			$(VHD_FOLDER)/alu.vhd \
+			$(VHD_FOLDER)/forwarding_unit.vhd \
+			$(VHD_FOLDER)/hazard_unit.vhd
 
 
 
@@ -40,9 +43,10 @@ datapath_EXTRA_VHD = $(VHD_FOLDER)/control.vhd \
 %:
 	@ mkdir -p simu
 	@ ghdl -i $(GHDL_FLAGS) $(VHD_GLOBALS) $($@_EXTRA_VHD) $(VHD_FOLDER)/$@.vhd $(TB_FOLDER)/$@_tb.vhd
-	@ ghdl -r $(GHDL_FLAGS) $@_tb --assert-level=failure --stop-time=$($@_TIME) --vcdgz=$@.vcdgz
+	@ ghdl -r $(GHDL_FLAGS) $@_tb --assert-level=failure --stop-time=$($@_TIME) --vcdgz=$@.vcdgz --wave=$@.ghw
 	@ mkdir -p $(WAVES_FOLDER)
-	gunzip --stdout $*.vcdgz | gtkwave --vcd $(WAVES_FOLDER)/$*.gtkw
+	#gunzip --stdout $*.vcdgz | gtkwave --vcd $(WAVES_FOLDER)/$*.gtkw
+	gtkwave -f $*.ghw $(WAVES_FOLDER)/$*_ghw.gtkw
 
 
 code:

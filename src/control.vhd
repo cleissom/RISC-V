@@ -21,6 +21,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
+use work.constants.all;
 
 entity control is
 	port (	opcode:			in std_logic_vector(6 downto 0);
@@ -34,7 +35,8 @@ entity control is
 		branch:			out std_logic_vector(2 downto 0);
 		jump:           out std_logic_vector(1 downto 0);
 		mem_write:		out std_logic_vector(1 downto 0);
-		mem_read:		out std_logic_vector(1 downto 0)
+		mem_read:		out std_logic_vector(1 downto 0);
+		op_debug:		out op_t
 	);
 end control;
 
@@ -53,6 +55,7 @@ begin
 				jump <= "00";
 				mem_write <= "00";
 				mem_read <= "00";
+				op_debug <= lui;
 			when "0010111" =>					-- AUIPC
 				reg_write <= '1';
 				mem_to_reg <= '0';
@@ -63,6 +66,7 @@ begin
 				jump <= "00";
 				mem_write <= "00";
 				mem_read <= "00";
+				op_debug <= aiupc;
 			when "1101111" =>					-- JAL
 				reg_write <= '1';
 				mem_to_reg <= '0';
@@ -73,6 +77,7 @@ begin
 				jump <= "01";
 				mem_write <= "00";
 				mem_read <= "00";
+				op_debug <= jal;
 			when "1100111" =>					-- JALR
 				reg_write <= '1';
 				mem_to_reg <= '0';
@@ -83,6 +88,7 @@ begin
 				jump <= "11";
 				mem_write <= "00";
 				mem_read <= "00";
+				op_debug <= jalr;
 			when "1100011" =>					-- branches
 				case funct3 is
 					when "000" =>				-- BEQ
@@ -95,6 +101,7 @@ begin
 						jump <= "00";
 						mem_write <= "00";
 						mem_read <= "00";
+						op_debug <= beq;
 					when "001" =>				-- BNE
 						reg_write <= '0';
 						mem_to_reg <= '0';
@@ -105,6 +112,7 @@ begin
 						jump <= "00";
 						mem_write <= "00";
 						mem_read <= "00";
+						op_debug <= bne;
 					when "100" =>				-- BLT
 						reg_write <= '0';
 						mem_to_reg <= '0';
@@ -115,6 +123,7 @@ begin
 						jump <= "00";
 						mem_write <= "00";
 						mem_read <= "00";
+						op_debug <= blt;
 					when "101" =>				-- BGE
 						reg_write <= '0';
 						mem_to_reg <= '0';
@@ -125,26 +134,7 @@ begin
 						jump <= "00";
 						mem_write <= "00";
 						mem_read <= "00";
-					when "110" =>				-- BLTU
-						reg_write <= '0';
-						mem_to_reg <= '0';
-						alu_src1 <= '0';
-						alu_src2 <= "00";
-						alu_op <= "1000";
-						branch <= "101";
-						jump <= "00";
-						mem_write <= "00";
-						mem_read <= "00";
-					when "111" =>				-- BGEU
-						reg_write <= '0';
-						mem_to_reg <= '0';
-						alu_src1 <= '0';
-						alu_src2 <= "00";
-						alu_op <= "1000";
-						branch <= "110";
-						jump <= "00";
-						mem_write <= "00";
-						mem_read <= "00";
+						op_debug <= bge;
 					when others =>
 						reg_write <= '0';
 						mem_to_reg <= '0';
@@ -155,6 +145,7 @@ begin
 						jump <= "00";
 						mem_write <= "00";
 						mem_read <= "00";
+						op_debug <= othrs;
 				end case;
 			when "0000011" => 					-- loads
 				case funct3 is
@@ -168,6 +159,7 @@ begin
 						jump <= "00";
 						mem_write <= "00";
 						mem_read <= "11";
+						op_debug <= lb;
 					when "010" =>				-- LW
 						reg_write <= '1';
 						mem_to_reg <= '1';
@@ -178,6 +170,7 @@ begin
 						jump <= "00";
 						mem_write <= "00";
 						mem_read <= "01";
+						op_debug <= lw;
 					when others =>
 						reg_write <= '0';
 						mem_to_reg <= '0';
@@ -188,6 +181,7 @@ begin
 						jump <= "00";
 						mem_write <= "00";
 						mem_read <= "00";
+						op_debug <= othrs;
 				end case;
 			when "0100011" =>					-- stores
 				case funct3 is
@@ -201,6 +195,7 @@ begin
 						jump <= "00";
 						mem_write <= "11";
 						mem_read <= "00";
+						op_debug <= sb;
 					when "010" =>				-- SW
 						reg_write <= '0';
 						mem_to_reg <= '0';
@@ -211,6 +206,7 @@ begin
 						jump <= "00";
 						mem_write <= "01";
 						mem_read <= "00";
+						op_debug <= sw;
 					when others =>
 						reg_write <= '0';
 						mem_to_reg <= '0';
@@ -221,6 +217,7 @@ begin
 						jump <= "00";
 						mem_write <= "00";
 						mem_read <= "00";
+						op_debug <= othrs;
 				end case;
 			when "0010011" =>					-- imm computation
 				case funct3 is
@@ -234,6 +231,7 @@ begin
 						jump <= "00";
 						mem_write <= "00";
 						mem_read <= "00";
+						op_debug <= addi;
 					when "010" =>				-- SLTI
 						reg_write <= '1';
 						mem_to_reg <= '0';
@@ -244,16 +242,7 @@ begin
 						jump <= "00";
 						mem_write <= "00";
 						mem_read <= "00";
-					when "011" =>				-- SLTIU
-						reg_write <= '1';
-						mem_to_reg <= '0';
-						alu_src1 <= '0';
-						alu_src2 <= "01";
-						alu_op <= "1000";
-						branch <= "000";
-						jump <= "00";
-						mem_write <= "00";
-						mem_read <= "00";
+						op_debug <= slti;
 					when "100" =>				-- XORI
 						reg_write <= '1';
 						mem_to_reg <= '0';
@@ -264,6 +253,7 @@ begin
 						jump <= "00";
 						mem_write <= "00";
 						mem_read <= "00";
+						op_debug <= xori;
 					when "110" =>				-- ORI
 						reg_write <= '1';
 						mem_to_reg <= '0';
@@ -274,6 +264,7 @@ begin
 						jump <= "00";
 						mem_write <= "00";
 						mem_read <= "00";
+						op_debug <= ori;
 					when "111" =>				-- ANDI
 						reg_write <= '1';
 						mem_to_reg <= '0';
@@ -284,49 +275,7 @@ begin
 						jump <= "00";
 						mem_write <= "00";
 						mem_read <= "00";
-					when "001" =>				-- SLLI
-						reg_write <= '1';
-						mem_to_reg <= '0';
-						alu_src1 <= '0';
-						alu_src2 <= "01";
-						alu_op <= "1001";
-						branch <= "000";
-						jump <= "00";
-						mem_write <= "00";
-						mem_read <= "00";
-					when "101" =>
-						case funct7 is
-							when "0000000" =>	-- SRLI
-								reg_write <= '1';
-								mem_to_reg <= '0';
-								alu_src1 <= '0';
-								alu_src2 <= "01";
-								alu_op <= "1010";
-								branch <= "000";
-								jump <= "00";
-								mem_write <= "00";
-								mem_read <= "00";
-							when "0100000" =>	-- SRAI
-								reg_write <= '1';
-								mem_to_reg <= '0';
-								alu_src1 <= '0';
-								alu_src2 <= "01";
-								alu_op <= "1100";
-								branch <= "000";
-								jump <= "00";
-								mem_write <= "00";
-								mem_read <= "00";
-							when others =>
-								reg_write <= '0';
-								mem_to_reg <= '0';
-								alu_src1 <= '0';
-								alu_src2 <= "01";
-								alu_op <= "0000";
-								branch <= "000";
-								jump <= "00";
-								mem_write <= "00";
-								mem_read <= "00";
-						end case;
+						op_debug <= andi;
 					when others =>
 						reg_write <= '0';
 						mem_to_reg <= '0';
@@ -337,6 +286,7 @@ begin
 						jump <= "00";
 						mem_write <= "00";
 						mem_read <= "00";
+						op_debug <= othrs;
 				end case;
 			when "0110011" =>					-- computation
 				case funct3 is
@@ -352,6 +302,7 @@ begin
 								jump <= "00";
 								mem_write <= "00";
 								mem_read <= "00";
+								op_debug <= add;
 							when "0100000" =>	-- SUB
 								reg_write <= '1';
 								mem_to_reg <= '0';
@@ -362,6 +313,7 @@ begin
 								jump <= "00";
 								mem_write <= "00";
 								mem_read <= "00";
+								op_debug <= sub;
 							when others =>
 								reg_write <= '0';
 								mem_to_reg <= '0';
@@ -372,6 +324,7 @@ begin
 								jump <= "00";
 								mem_write <= "00";
 								mem_read <= "00";
+								op_debug <= othrs;
 						end case;
 					when "001" =>				-- SLL
 						reg_write <= '1';
@@ -383,6 +336,7 @@ begin
 						jump <= "00";
 						mem_write <= "00";
 						mem_read <= "00";
+						op_debug <= sll_op;
 					when "010" =>				-- SLT
 						reg_write <= '1';
 						mem_to_reg <= '0';
@@ -393,16 +347,7 @@ begin
 						jump <= "00";
 						mem_write <= "00";
 						mem_read <= "00";
-					when "011" =>				-- SLTU
-						reg_write <= '1';
-						mem_to_reg <= '0';
-						alu_src1 <= '0';
-						alu_src2 <= "00";
-						alu_op <= "1000";
-						branch <= "000";
-						jump <= "00";
-						mem_write <= "00";
-						mem_read <= "00";
+						op_debug <= slt;
 					when "100" =>				-- XOR
 						reg_write <= '1';
 						mem_to_reg <= '0';
@@ -413,6 +358,7 @@ begin
 						jump <= "00";
 						mem_write <= "00";
 						mem_read <= "00";
+						op_debug <= xor_op;
 					when "101" =>
 						case funct7 is
 							when "0000000" =>	-- SRL
@@ -425,6 +371,7 @@ begin
 								jump <= "00";
 								mem_write <= "00";
 								mem_read <= "00";
+								op_debug <= srl_op;
 							when "0100000" =>	-- SRA
 								reg_write <= '1';
 								mem_to_reg <= '0';
@@ -435,6 +382,7 @@ begin
 								jump <= "00";
 								mem_write <= "00";
 								mem_read <= "00";
+								op_debug <= sra_op;
 							when others =>
 								reg_write <= '0';
 								mem_to_reg <= '0';
@@ -445,6 +393,7 @@ begin
 								jump <= "00";
 								mem_write <= "00";
 								mem_read <= "00";
+								op_debug <= othrs;
 						end case;
 					when "110" =>				-- OR
 						reg_write <= '1';
@@ -456,6 +405,7 @@ begin
 						jump <= "00";
 						mem_write <= "00";
 						mem_read <= "00";
+						op_debug <= or_op;
 					when "111" =>				-- AND
 						reg_write <= '1';
 						mem_to_reg <= '0';
@@ -466,6 +416,7 @@ begin
 						jump <= "00";
 						mem_write <= "00";
 						mem_read <= "00";
+						op_debug <= and_op;
 					when others =>
 						reg_write <= '0';
 						mem_to_reg <= '0';
@@ -476,6 +427,7 @@ begin
 						jump <= "00";
 						mem_write <= "00";
 						mem_read <= "00";
+						op_debug <= othrs;
 				end case;
 			when "1110011" =>					-- SYSTEM
 				reg_write <= '0';
@@ -487,6 +439,20 @@ begin
 				jump <= "00";
 				mem_write <= "00";
 				mem_read <= "00";
+				op_debug <= system;
+				
+			when "0000000" =>					-- NOP
+				reg_write <= '0';
+				mem_to_reg <= '0';
+				alu_src1 <= '0';
+				alu_src2 <= "01";
+				alu_op <= "0000";
+				branch <= "000";
+				jump <= "00";
+				mem_write <= "00";
+				mem_read <= "00";
+				op_debug <= nop;
+			
 			when others =>
 				reg_write <= '0';
 				mem_to_reg <= '0';
@@ -497,6 +463,7 @@ begin
 				jump <= "00";
 				mem_write <= "00";
 				mem_read <= "00";
+				op_debug <= othrs;
 		end case;
 	end process;
 end arch_control;

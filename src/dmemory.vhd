@@ -49,6 +49,8 @@ architecture RTL of dmemory is
 	
 begin
 	
+	
+	
 	byte_addr <= addr(1 downto 0);
 	
 	byte_data <= data_o_block1 when byte_addr = "01" else

@@ -3,6 +3,8 @@
 
 /simu
 *.vcdgz
+*.ghw
+*.qws
 
 quartus/db
 quartus/incremental_db
