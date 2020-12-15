@@ -197,7 +197,7 @@ begin
 	immediate <= imm_i  when opcode = "0010011" or opcode = "0000011" or opcode = "1100111" else -- I
 				 imm_s  when opcode = "0100011" else -- S
 				 imm_sb when opcode = "1100011" else -- SB
-				 imm_u  when opcode = "0100111" else -- U
+				 imm_u  when opcode = "0100111" or opcode = "0110111" else -- U
 				 imm_uj when opcode = "1101111" else -- UJ
 				 imm_i;  -- when others   
 				

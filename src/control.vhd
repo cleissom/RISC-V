@@ -56,17 +56,6 @@ begin
 				mem_write <= "00";
 				mem_read <= "00";
 				op_debug <= lui;
-			when "0010111" =>					-- AUIPC
-				reg_write <= '1';
-				mem_to_reg <= '0';
-				alu_src1 <= '1';
-				alu_src2 <= "01";
-				alu_op <= "0100";
-				branch <= "000";
-				jump <= "00";
-				mem_write <= "00";
-				mem_read <= "00";
-				op_debug <= aiupc;
 			when "1101111" =>					-- JAL
 				reg_write <= '1';
 				mem_to_reg <= '0';

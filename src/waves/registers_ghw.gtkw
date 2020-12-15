@@ -1,0 +1,43 @@
+[*]
+[*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
+[*] Mon Dec 14 16:30:01 2020
+[*]
+[dumpfile] "/home/cleissom/workspaceSigasi/RISC-V/registers.ghw"
+[dumpfile_mtime] "Mon Dec 14 16:25:07 2020"
+[dumpfile_size] 4903
+[savefile] "/home/cleissom/workspaceSigasi/RISC-V/src/waves/registers_ghw.gtkw"
+[timestart] 0
+[size] 1920 1016
+[pos] -1 -1
+*-24.874985 0 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top.
+[treeopen] top.registers_tb.
+[sst_width] 221
+[signals_width] 346
+[sst_expanded] 1
+[sst_vpaned_height] 289
+@28
+top.registers_tb.dut.clk
+@200
+-
+@22
+#{top.registers_tb.read_data1[31:0]} top.registers_tb.read_data1[31] top.registers_tb.read_data1[30] top.registers_tb.read_data1[29] top.registers_tb.read_data1[28] top.registers_tb.read_data1[27] top.registers_tb.read_data1[26] top.registers_tb.read_data1[25] top.registers_tb.read_data1[24] top.registers_tb.read_data1[23] top.registers_tb.read_data1[22] top.registers_tb.read_data1[21] top.registers_tb.read_data1[20] top.registers_tb.read_data1[19] top.registers_tb.read_data1[18] top.registers_tb.read_data1[17] top.registers_tb.read_data1[16] top.registers_tb.read_data1[15] top.registers_tb.read_data1[14] top.registers_tb.read_data1[13] top.registers_tb.read_data1[12] top.registers_tb.read_data1[11] top.registers_tb.read_data1[10] top.registers_tb.read_data1[9] top.registers_tb.read_data1[8] top.registers_tb.read_data1[7] top.registers_tb.read_data1[6] top.registers_tb.read_data1[5] top.registers_tb.read_data1[4] top.registers_tb.read_data1[3] top.registers_tb.read_data1[2] top.registers_tb.read_data1[1] top.registers_tb.read_data1[0]
+#{top.registers_tb.read_data2[31:0]} top.registers_tb.read_data2[31] top.registers_tb.read_data2[30] top.registers_tb.read_data2[29] top.registers_tb.read_data2[28] top.registers_tb.read_data2[27] top.registers_tb.read_data2[26] top.registers_tb.read_data2[25] top.registers_tb.read_data2[24] top.registers_tb.read_data2[23] top.registers_tb.read_data2[22] top.registers_tb.read_data2[21] top.registers_tb.read_data2[20] top.registers_tb.read_data2[19] top.registers_tb.read_data2[18] top.registers_tb.read_data2[17] top.registers_tb.read_data2[16] top.registers_tb.read_data2[15] top.registers_tb.read_data2[14] top.registers_tb.read_data2[13] top.registers_tb.read_data2[12] top.registers_tb.read_data2[11] top.registers_tb.read_data2[10] top.registers_tb.read_data2[9] top.registers_tb.read_data2[8] top.registers_tb.read_data2[7] top.registers_tb.read_data2[6] top.registers_tb.read_data2[5] top.registers_tb.read_data2[4] top.registers_tb.read_data2[3] top.registers_tb.read_data2[2] top.registers_tb.read_data2[1] top.registers_tb.read_data2[0]
+#{top.registers_tb.write_data[31:0]} top.registers_tb.write_data[31] top.registers_tb.write_data[30] top.registers_tb.write_data[29] top.registers_tb.write_data[28] top.registers_tb.write_data[27] top.registers_tb.write_data[26] top.registers_tb.write_data[25] top.registers_tb.write_data[24] top.registers_tb.write_data[23] top.registers_tb.write_data[22] top.registers_tb.write_data[21] top.registers_tb.write_data[20] top.registers_tb.write_data[19] top.registers_tb.write_data[18] top.registers_tb.write_data[17] top.registers_tb.write_data[16] top.registers_tb.write_data[15] top.registers_tb.write_data[14] top.registers_tb.write_data[13] top.registers_tb.write_data[12] top.registers_tb.write_data[11] top.registers_tb.write_data[10] top.registers_tb.write_data[9] top.registers_tb.write_data[8] top.registers_tb.write_data[7] top.registers_tb.write_data[6] top.registers_tb.write_data[5] top.registers_tb.write_data[4] top.registers_tb.write_data[3] top.registers_tb.write_data[2] top.registers_tb.write_data[1] top.registers_tb.write_data[0]
+@200
+-
+@22
+#{top.registers_tb.read_reg1[4:0]} top.registers_tb.read_reg1[4] top.registers_tb.read_reg1[3] top.registers_tb.read_reg1[2] top.registers_tb.read_reg1[1] top.registers_tb.read_reg1[0]
+#{top.registers_tb.read_reg2[4:0]} top.registers_tb.read_reg2[4] top.registers_tb.read_reg2[3] top.registers_tb.read_reg2[2] top.registers_tb.read_reg2[1] top.registers_tb.read_reg2[0]
+#{top.registers_tb.write_reg[4:0]} top.registers_tb.write_reg[4] top.registers_tb.write_reg[3] top.registers_tb.write_reg[2] top.registers_tb.write_reg[1] top.registers_tb.write_reg[0]
+@200
+-
+@28
+top.registers_tb.reg_write
+@200
+-
+@22
+#{top.registers_tb.dut.registers[8][31:0]} top.registers_tb.dut.registers[8][31] top.registers_tb.dut.registers[8][30] top.registers_tb.dut.registers[8][29] top.registers_tb.dut.registers[8][28] top.registers_tb.dut.registers[8][27] top.registers_tb.dut.registers[8][26] top.registers_tb.dut.registers[8][25] top.registers_tb.dut.registers[8][24] top.registers_tb.dut.registers[8][23] top.registers_tb.dut.registers[8][22] top.registers_tb.dut.registers[8][21] top.registers_tb.dut.registers[8][20] top.registers_tb.dut.registers[8][19] top.registers_tb.dut.registers[8][18] top.registers_tb.dut.registers[8][17] top.registers_tb.dut.registers[8][16] top.registers_tb.dut.registers[8][15] top.registers_tb.dut.registers[8][14] top.registers_tb.dut.registers[8][13] top.registers_tb.dut.registers[8][12] top.registers_tb.dut.registers[8][11] top.registers_tb.dut.registers[8][10] top.registers_tb.dut.registers[8][9] top.registers_tb.dut.registers[8][8] top.registers_tb.dut.registers[8][7] top.registers_tb.dut.registers[8][6] top.registers_tb.dut.registers[8][5] top.registers_tb.dut.registers[8][4] top.registers_tb.dut.registers[8][3] top.registers_tb.dut.registers[8][2] top.registers_tb.dut.registers[8][1] top.registers_tb.dut.registers[8][0]
+#{top.registers_tb.dut.registers[9][31:0]} top.registers_tb.dut.registers[9][31] top.registers_tb.dut.registers[9][30] top.registers_tb.dut.registers[9][29] top.registers_tb.dut.registers[9][28] top.registers_tb.dut.registers[9][27] top.registers_tb.dut.registers[9][26] top.registers_tb.dut.registers[9][25] top.registers_tb.dut.registers[9][24] top.registers_tb.dut.registers[9][23] top.registers_tb.dut.registers[9][22] top.registers_tb.dut.registers[9][21] top.registers_tb.dut.registers[9][20] top.registers_tb.dut.registers[9][19] top.registers_tb.dut.registers[9][18] top.registers_tb.dut.registers[9][17] top.registers_tb.dut.registers[9][16] top.registers_tb.dut.registers[9][15] top.registers_tb.dut.registers[9][14] top.registers_tb.dut.registers[9][13] top.registers_tb.dut.registers[9][12] top.registers_tb.dut.registers[9][11] top.registers_tb.dut.registers[9][10] top.registers_tb.dut.registers[9][9] top.registers_tb.dut.registers[9][8] top.registers_tb.dut.registers[9][7] top.registers_tb.dut.registers[9][6] top.registers_tb.dut.registers[9][5] top.registers_tb.dut.registers[9][4] top.registers_tb.dut.registers[9][3] top.registers_tb.dut.registers[9][2] top.registers_tb.dut.registers[9][1] top.registers_tb.dut.registers[9][0]
+[pattern_trace] 1
+[pattern_trace] 0

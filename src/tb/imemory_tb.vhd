@@ -27,6 +27,7 @@ begin
 			imemory_width => imemory_width
 		)
 		port map(
+			clk => clk,
 			addr   => addr(imemory_width-1 downto 0),
 			data_o => read_data
 		);

@@ -1,0 +1,28 @@
+[*]
+[*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
+[*] Mon Dec 14 18:20:20 2020
+[*]
+[dumpfile] "/home/cleissom/workspaceSigasi/RISC-V/imemory.ghw"
+[dumpfile_mtime] "Mon Dec 14 18:18:52 2020"
+[dumpfile_size] 25951
+[savefile] "/home/cleissom/workspaceSigasi/RISC-V/src/waves/imemory_ghw.gtkw"
+[timestart] 0
+[size] 1920 1016
+[pos] -39 -39
+*-24.000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top.
+[treeopen] top.imemory_tb.
+[treeopen] top.imemory_tb.dut.
+[sst_width] 221
+[signals_width] 150
+[sst_expanded] 1
+[sst_vpaned_height] 289
+@28
+top.imemory_tb.clk
+@200
+-
+@22
+#{top.imemory_tb.addr[31:0]} top.imemory_tb.addr[31] top.imemory_tb.addr[30] top.imemory_tb.addr[29] top.imemory_tb.addr[28] top.imemory_tb.addr[27] top.imemory_tb.addr[26] top.imemory_tb.addr[25] top.imemory_tb.addr[24] top.imemory_tb.addr[23] top.imemory_tb.addr[22] top.imemory_tb.addr[21] top.imemory_tb.addr[20] top.imemory_tb.addr[19] top.imemory_tb.addr[18] top.imemory_tb.addr[17] top.imemory_tb.addr[16] top.imemory_tb.addr[15] top.imemory_tb.addr[14] top.imemory_tb.addr[13] top.imemory_tb.addr[12] top.imemory_tb.addr[11] top.imemory_tb.addr[10] top.imemory_tb.addr[9] top.imemory_tb.addr[8] top.imemory_tb.addr[7] top.imemory_tb.addr[6] top.imemory_tb.addr[5] top.imemory_tb.addr[4] top.imemory_tb.addr[3] top.imemory_tb.addr[2] top.imemory_tb.addr[1] top.imemory_tb.addr[0]
+#{top.imemory_tb.read_data[31:0]} top.imemory_tb.read_data[31] top.imemory_tb.read_data[30] top.imemory_tb.read_data[29] top.imemory_tb.read_data[28] top.imemory_tb.read_data[27] top.imemory_tb.read_data[26] top.imemory_tb.read_data[25] top.imemory_tb.read_data[24] top.imemory_tb.read_data[23] top.imemory_tb.read_data[22] top.imemory_tb.read_data[21] top.imemory_tb.read_data[20] top.imemory_tb.read_data[19] top.imemory_tb.read_data[18] top.imemory_tb.read_data[17] top.imemory_tb.read_data[16] top.imemory_tb.read_data[15] top.imemory_tb.read_data[14] top.imemory_tb.read_data[13] top.imemory_tb.read_data[12] top.imemory_tb.read_data[11] top.imemory_tb.read_data[10] top.imemory_tb.read_data[9] top.imemory_tb.read_data[8] top.imemory_tb.read_data[7] top.imemory_tb.read_data[6] top.imemory_tb.read_data[5] top.imemory_tb.read_data[4] top.imemory_tb.read_data[3] top.imemory_tb.read_data[2] top.imemory_tb.read_data[1] top.imemory_tb.read_data[0]
+[pattern_trace] 1
+[pattern_trace] 0

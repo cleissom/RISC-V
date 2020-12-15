@@ -10,15 +10,15 @@ Este projeto é baseado na estrutura apresentada no livro *Computer Organization
 
 Este projeto possui as seguintes alterações do projeto utilizado como base:
 
-* Modificação da estrutura para um pipeline de 5 estágios
+* Modificação da estrutura para um pipeline de 5 estágios.
 
-* Modificação da Unidade de Controle para a nova estrutura
+* Modificação da Unidade de Controle.
 
-* Separação da Memória de Dados e da Memória de Instruções
+* Separação da Memória de Dados e da Memória de Instruções.
 
-* Adição da Unidade de Forwarding
+* Adição da Unidade de Forwarding.
 
-* Adição da Unidade de Hazard
+* Adição da Unidade de Hazard.
 
   
 
@@ -45,13 +45,23 @@ sudo apt install gtkwave
 
 ## Como Simular
 
-Primeiramente é necessário um arquivo `code.txt` na pasta raiz que contenha as instruções a serem carregadas na Memória de Instrução na inicialização da simulação. Este arquivo pode ser gerado a partir de um arquivo binário (`code.bin`) utilizando o comando `make code`.
+Primeiramente é necessário um arquivo `code.txt` na pasta raiz que contenha as instruções a serem carregadas na Memória de Instrução na inicialização da simulação. Este arquivo pode ser gerado a partir de um arquivo binário (`code.bin`) utilizando o comando `make code`. Ou, é possível utilizar os programas já disponibilizados na pasta `/codes`. A pasta `/codes` possui exemplos de programas em assembly (`.s`) e seu respectivo binário (`.bin`).
 
-A pasta `/codes` possui exemplos de programas em assembly (`.s`) e seu respectivo binário (`.bin`)
+Para utilizar o exemplo de bubble sort:
+
+```
+make code file=bubble-sort
+```
+
+Para utilizar o exemplo que utiliza todas as instruções implementadas:
+
+```
+make code file=test-all-instructions
+```
 
 
 
-A simulação e a forma de onda do datapath completo pode ser obtida pelo comando:
+Após isso, simulação e a forma de onda do datapath completo pode ser obtida pelo comando:
 
 ```
 make datapath

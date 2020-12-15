@@ -44,9 +44,9 @@ begin
 		
 	stilumus: process
 	begin
-		read_reg1  <= std_logic_vector(to_unsigned(10, 5));
-		read_reg2  <= std_logic_vector(to_unsigned(11, 5));
-		write_reg  <= std_logic_vector(to_unsigned(12, 5));
+		read_reg1  <= std_logic_vector(to_unsigned(6, 5));
+		read_reg2  <= std_logic_vector(to_unsigned(7, 5));
+		write_reg  <= std_logic_vector(to_unsigned(8, 5));
 		write_data <= std_logic_vector(to_unsigned(20, data_width));
 		reg_write  <= '0';
 		wait for 5 ns;
@@ -54,9 +54,9 @@ begin
 		wait for 10 ns;
 		reg_write  <= '0';
 		wait for 10 ns;
-		read_reg1  <= std_logic_vector(to_unsigned(12, 5));
-		read_reg2  <= std_logic_vector(to_unsigned(13, 5));
-		write_reg  <= std_logic_vector(to_unsigned(13, 5));
+		read_reg1  <= std_logic_vector(to_unsigned(8, 5));
+		read_reg2  <= std_logic_vector(to_unsigned(9, 5));
+		write_reg  <= std_logic_vector(to_unsigned(9, 5));
 		write_data <= std_logic_vector(to_unsigned(30, data_width));
 		reg_write  <= '1';
 		wait for 10 ns;

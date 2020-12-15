@@ -2,6 +2,7 @@ VHD_FOLDER = ./src
 TB_FOLDER = ./src/tb
 SCRIPTS_FOLDER = ./src/scripts
 WAVES_FOLDER = ./src/waves
+CODES_FOLDER = ./codes
 
 VHD_CONSTANTS = $(VHD_FOLDER)/constants.vhd
 VHD_GLOBALS = $(VHD_CONSTANTS)
@@ -14,7 +15,7 @@ dmemory_TIME = 600ns
 regn_TIME = 40ns
 registers_TIME = 200ns
 alu_TIME = 80ns
-datapath_TIME = 1000ns
+datapath_TIME = 30000ns
 
 
 
@@ -35,10 +36,20 @@ datapath_EXTRA_VHD = 	$(VHD_FOLDER)/control.vhd \
 
 
 
+
+code: 
+ifdef file
+	@ cp $(CODES_FOLDER)/$(file).bin code.bin
+	@ cp $(CODES_FOLDER)/$(file).s code.s
+	@ hexdump -v -e '4/1 "%02x" "\n"' code.bin > code.txt
+else
+	@ hexdump -v -e '4/1 "%02x" "\n"' code.bin > code.txt
+endif
+
+
+
 # Command line simulation using the free ghdl
 # run simulation with 'make alu time=10ms' to run for 10ms
-
-
 
 %:
 	@ mkdir -p simu
@@ -48,9 +59,6 @@ datapath_EXTRA_VHD = 	$(VHD_FOLDER)/control.vhd \
 	#gunzip --stdout $*.vcdgz | gtkwave --vcd $(WAVES_FOLDER)/$*.gtkw
 	gtkwave -f $*.ghw $(WAVES_FOLDER)/$*_ghw.gtkw
 
-
-code:
-	@ hexdump -v -e '4/1 "%02x" "\n"' code.bin > code.txt
 
 
 
