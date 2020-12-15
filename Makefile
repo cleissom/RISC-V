@@ -72,7 +72,10 @@ clean-ghdl:
 	@ rm -rf simu
 	@ rm -f tb
 	@ rm -f *.vcdgz
+	@ rm -f *.ghw
 	@ rm -f *.txt
+	@ rm -f *.bin
+	@ rm -f *.s
 
 # Clean all generated files
 clean: clean-ghdl
